@@ -1,0 +1,30 @@
+{
+  "name": "handchestra",
+  "version": "0.1.0",
+  "description": "Your pocket orchestra — AI-powered hand-tracked synthesizer",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oguzokdotdev/handchestra.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oguzokdotdev/handchestra/issues"
+  },
+  "homepage": "https://github.com/oguzokdotdev/handchestra#readme",
+  "devDependencies": {
+    "vite": "^8.0.13"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.35",
+    "tone": "^15.1.22"
+  }
+}
