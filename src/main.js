@@ -4,6 +4,7 @@ import { Tracker } from './modules/Tracker';
 import { Visuals } from './modules/Visuals';
 import { Audio } from './modules/Audio';
 import { getDistance } from './utils/math';
+import { LandmarkSmoother } from './utils/smooth';
 
 const videoElement = document.getElementById('webcam');
 const canvasElement = document.getElementById('output_canvas');
@@ -13,6 +14,7 @@ const tracker = new Tracker();
 const visuals = new Visuals(canvasElement);
 const audio = new Audio();
 let audioStarted = false;
+const smoother = new LandmarkSmoother(0.4);
 
 let lastNoteTime = 0;
 const NOTE_COOLDOWN = 300;
@@ -36,11 +38,12 @@ function processFrame() {
   const results = tracker.detect(videoElement, startTimeMs);
 
   if (results && results.landmarks) {
-    visuals.draw(results.landmarks);
+   const smoothed = smoother.smooth(results.landmarks); // <-- вот здесь
+   visuals.draw(smoothed);
 
     if (audioStarted) {
       const now = performance.now();
-      results.landmarks.forEach(hand => {
+      smoothed.forEach(hand => {
         const thumbTip = hand[4];
         const indexTip = hand[8];
         
