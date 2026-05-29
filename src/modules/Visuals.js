@@ -1,16 +1,19 @@
+import { Zones } from './Zones';
+
 const CONNECTIONS = [
-  [0,1],[1,2],[2,3],[3,4],       // Большой
-  [0,5],[5,6],[6,7],[7,8],       // Указательный
-  [0,9],[9,10],[10,11],[11,12],  // Средний
-  [0,13],[13,14],[14,15],[15,16],// Безымянный
-  [0,17],[17,18],[18,19],[19,20],// Мизинец
-  [5,9],[9,13],[13,17]           // Ладонь
+  [0,1],[1,2],[2,3],[3,4],
+  [0,5],[5,6],[6,7],[7,8],
+  [0,9],[9,10],[10,11],[11,12],
+  [0,13],[13,14],[14,15],[15,16],
+  [0,17],[17,18],[18,19],[19,20],
+  [5,9],[9,13],[13,17]
 ];
 
 export class Visuals {
   constructor(canvasElement) {
     this.canvas = canvasElement;
     this.ctx = this.canvas.getContext('2d');
+    this.zones = new Zones(canvasElement);
   }
 
   resize() {
@@ -18,12 +21,15 @@ export class Visuals {
     this.canvas.height = window.innerHeight;
   }
 
-  draw(landmarks) {
+  draw(landmarks, activeInstrument = null) {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // Зоны фоном
+    this.zones.draw(this.ctx, activeInstrument);
+
     if (!landmarks) return;
 
     for (const hand of landmarks) {
-      // Линии (кости)
       this.ctx.strokeStyle = 'rgba(0, 212, 255, 0.6)';
       this.ctx.lineWidth = 2;
       this.ctx.shadowBlur = 8;
@@ -38,11 +44,9 @@ export class Visuals {
         this.ctx.stroke();
       }
 
-      // Точки (суставы) поверх линий
       for (const point of hand) {
         const x = point.x * this.canvas.width;
         const y = point.y * this.canvas.height;
-
         this.ctx.beginPath();
         this.ctx.arc(x, y, 3, 0, 2 * Math.PI);
         this.ctx.fillStyle = '#ffffff';
